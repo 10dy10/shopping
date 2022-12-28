@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- css -->
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+
+    <!-- js -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="../js/main.js" defer></script>
+
+    <title>장바구니</title>
+    
+    <style>
+      header .cart {
+        display: none;
+      }
+    </style>
+
+  </head>
+  <body>
+    <!-- header -->
+    <header id="header"></header>
+
+    <!-- main -->
+    <main>
+      <article class="banner">
+        <div class="inner">
+          <h2>장바구니</h2>
+          <p>담아놓은 사진 확인하세요!</p>
+        </div>
+      </article>
+    </main>
+
+    <section>
+      <article class="inner">
+        <h3>CART</h3>
+        <div class="cart_wrap">
+        </div>
+      </article>
+    </section>
+
+    <!-- footer -->
+    <footer id="footer"></footer>
+
+
+    <script>
+
+      // 이미지 배열 가져오기
+      let img = [];
+
+      $.ajax({
+        url: '/images.json',
+        async: false,
+        success: function(data) {
+          img = data.images
+        }
+      });
+
+      let cartImg = JSON.parse(localStorage.getItem('imgNum'));
+      const cart = document.querySelector('.cart_wrap');
+
+      // 장바구니 페이지 로드 시 클릭했던 것들 노출
+      for(let i = 0; i < cartImg.length; i++) {
+        const template = `
+          <div>
+            <input type="checkbox" />
+            <img src="/images/${cartImg[i]}.jpg" />
+            <p>${img[cartImg[i]].title}</p>
+            <i class="xi-trash-o delete_cart" data-id=${cartImg[i]}></i>
+          </div>`;
+
+        cart.insertAdjacentHTML('beforeend', template);
+      }
+
+      const deleteImg = document.querySelectorAll('.delete_cart');
+
+      // 휴지통 버튼 클릭 시 사진 지워지게
+      deleteImg.forEach((e) => {
+        e.addEventListener('click', function(el) {
+          let del = JSON.parse(localStorage.imgNum);
+          
+          del = del.filter(function(item) {
+            return item !== el.target.dataset.id;
+          })
+
+          localStorage.setItem('imgNum', JSON.stringify(del));
+
+          for(let i = 0; i < cartImg.length; i++) {
+            const template = `
+              <div>
+                <input type="checkbox" />
+                <img src="/images/${cartImg[i]}.jpg" />
+                <p>${img[cartImg[i]].title}</p>
+                <i class="xi-trash-o delete_cart" data-id=${cartImg[i]}></i>
+              </div>`;
+
+            cart.insertAdjacentHTML('beforeend', template);
+          }
+
+          alert('장바구니에서 삭제했습니다.')
+
+          location.reload()
+        })
+      })
+
+    </script>
+
+  </body>
+</html>

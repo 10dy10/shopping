@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- css -->
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+
+    <!-- js -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <script src="./js/main.js" defer></script>
+
+    <title>Cat & dog</title>
+
+  </head>
+  <body>
+    <!-- header -->
+    <header id="header"></header>
+
+    <!-- main -->
+    <main>
+      <article class="banner">
+        <div class="inner">
+          <h2>귀여운 것들이 세상을 지배한다!</h2>
+          <p>귀여운 친구들 보고가세요!</p>
+        </div>
+      </article>
+    </main>
+
+    <!-- photo_wrap -->
+    <section class="photo_wrap">
+      <article>
+        <div class="inner">
+          <h3>PHOTO</h3>
+          <div class="swiper">
+            <div class="photo_wrap_slide swiper-wrapper">
+              <div class="img_box swiper-slide">
+                <img src="/images/0.jpg" alt="" />
+              </div>
+              <div class="img_box swiper-slide">
+                <img src="/images/1.jpg" alt="" />
+              </div>
+              <div class="img_box swiper-slide">
+                <img src="/images/2.jpg" alt="" />
+              </div>
+              <div class="swiper-slide img_box">
+                <img src="/images/3.jpg" alt="" />
+              </div>
+              <div class="img_box swiper-slide">
+                <img src="/images/4.jpg" alt="" />
+              </div>
+              <div class="img_box swiper-slide">
+                <img src="/images/5.jpg" alt="" />
+              </div>
+              <div class="img_box swiper-slide">
+                <img src="/images/6.jpg" alt="" />
+              </div>
+              <div class="img_box swiper-slide">
+                <img src="/images/7.jpg" alt="" />
+              </div>
+              <div class="img_box swiper-slide">
+                <img src="/images/8.jpg" alt="" />
+              </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="down_wrap">
+      <article>
+        <div class="inner">
+          <h3>CHOOSE PHOTO</h3>
+          <ul class="down_wrap_img">
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <!-- footer -->
+    <footer id="footer"></footer>
+
+    <script>      
+      // 이미지 배열 가져오기
+      let img = [];
+      const dWI = document.querySelector('.down_wrap_img');
+
+      $.ajax({
+        url: '/images.json',
+        async: false,
+        success: function(data) {
+          img = data.images
+        }
+      });
+
+      // 가져온 img배열 랜덤정리
+      const shuffle = () => ( Math.random() - 0.5);
+      const shuffled = [...img].sort(shuffle);
+      
+      console.log(shuffled);
+      
+      // 이미지 배열 html 삽입
+      for(let i = 0; i < shuffled.length; i++) {
+        const template = 
+          `<li class="img_box">
+            <img src="/images/${shuffled[i].photo}" alt="">
+            <h4 title="img-tit">${shuffled[i].title}</h4>
+            <i class="xi-cart-add add_cart" data-id=${shuffled[i].id}></i>
+          </li>`;
+        
+        dWI.insertAdjacentHTML('beforeend', template);
+      }
+
+      // 장바구니에 넣기      
+      const addCart = document.querySelectorAll('.add_cart');
+
+      addCart.forEach((e) => {
+        e.addEventListener('click', function(el){
+          let num = el.target.dataset.id;  // img id 값
+
+          if(localStorage.getItem('imgNum') != null) {
+            let imgNum = JSON.parse(localStorage.imgNum)
+            if (imgNum.indexOf(num) >= 0) {
+              alert('이미 장바구니에 담겨있습니다!')
+              return  // 이미 담겨 있으니 처음으로
+            }
+            imgNum.push(num)
+            localStorage.setItem('imgNum', JSON.stringify(imgNum))
+          } else {
+            localStorage.setItem('imgNum', JSON.stringify([num]))
+          }
+
+          alert('장바구니에 담겼습니다!')
+        })
+      })
+
+
+      // slide
+      const swiper = new Swiper('.swiper', {
+        loop: true,
+        slidesPerView: 3,
+        spaceBetween: 50,
+
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          type: "progressbar",
+        },
+      });
+
+    </script>
+  </body>
+</html>

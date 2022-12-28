@@ -1,0 +1,130 @@
+
+$white: #fff;
+
+@mixin set-width-padding {
+  width: 100%;
+  padding: 0 2rem;
+}
+
+:root {
+  --swiper-theme-color: #fdd72f;
+}
+
+* {
+  box-sizing: border-box;
+}
+.inner {
+  @include set-width-padding;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+/* header */
+header {
+  @include set-width-padding;
+  height: 8rem;
+  nav {
+    height: 100%;
+    ul {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      height: 100%;
+      margin: 0 auto;
+      font: {
+        family: "Kdam Thmor Pro";
+        size: 2.4rem;
+        weight: 600;
+      }
+      li a {
+        color: rgb(22, 22, 56);
+      }
+      .logo{
+        font: {
+          size: 2.9rem;
+          weight: 700;
+        }
+      }
+      .header_center {
+        display: flex;
+        align-items: center;
+        gap: 5rem;
+      }
+    }
+  }
+}
+
+.banner {
+  width: 100%;
+  height: 63rem;
+  background : {
+    image: url(/images/banner.jpg);
+    repeat: no-repeat;
+    size: cover;
+  }
+  .inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: left;
+    padding: 8rem 2rem;
+    gap: 2rem;
+    height: 100%;
+    color: #fff;
+    h2 {
+      font: {
+        size: 3.5rem;
+        weight: 600;
+      }
+      color: $white;
+    }
+  }
+}
+
+section {
+  padding: 10em 0;
+  h3 {
+    margin-bottom: 7rem;
+    font: {
+      family: "Kdam Thmor Pro";
+      size: 2.4rem;
+      weight: 500;
+    }
+    text-align: center;
+  }
+}
+
+.swiper {
+  width: 100%;
+  &-slide {
+    img {
+      width: 100%;
+    }
+  }
+}
+.swiper-horizontal > .swiper-pagination-progressbar, 
+.swiper-pagination-progressbar.swiper-pagination-horizontal {
+  top: initial;
+  bottom: 0;
+}
+
+.down_wrap {
+  width: 100%;
+  &_img {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    row-gap: 2rem;
+    width: 100%;
+    .img_box {
+      width: 31%;
+      img {
+        width: 100%; 
+      }
+      .add_cart {
+        cursor: pointer;
+      }
+    }
+  }
+}
